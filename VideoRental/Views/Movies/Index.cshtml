@@ -1,0 +1,32 @@
+﻿@model IEnumerable<VideoRental.Models.Movie>
+
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+<p>
+    @Html.ActionLink("New Movie", "New", "Movies", null, new { @class = "btn btn-primary" })
+</p>
+
+<table id="movies" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Genre</th>
+            
+        </tr>
+        @foreach (var el in Model)
+        {
+            <tr>
+                <td><a asp-action="Edit" asp-route-id=@el.Id>@el.Name</a></td>
+
+                <td>@el.Genre.Name</td>
+               
+            </tr>
+        }
+
+    </thead>
+    <tbody></tbody>
+</table>
