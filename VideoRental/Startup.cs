@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VideoRental.AutoMapper;
+using VideoRental.Dtos;
+using VideoRental.Models;
 
 namespace VideoRental
 {
@@ -31,6 +35,16 @@ namespace VideoRental
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            //dodawanie automappera
+            var config = new MapperConfiguration(cfg => {
+               
+                cfg.AddProfile(new MappingProfile());
+            });
+
+            var mapping = config.CreateMapper();
+
+            services.AddSingleton(mapping);
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
