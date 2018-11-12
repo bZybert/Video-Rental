@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VideoRental.Dtos;
 using VideoRental.Models;
 
 namespace VideoRental.Controllers.Api
@@ -12,97 +14,83 @@ namespace VideoRental.Controllers.Api
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private EFCContext _context;
-        public CustomersController()
+        private readonly EFCContext _context;
+
+        private readonly IMapper _mapper;
+
+        public CustomersController(IMapper mapper)
         {
             _context = new EFCContext();
-        }
-
-        /*
-        public IEnumerable<Customer> GetCustomers()
-        {
-            return _context.Customers.ToList();
-        }
-
-        public Customer GetCustomer(int id)
-        {
-            var customer = _context.Customers.SingleOrDefault(x => x.Id == id);
-            if (customer == null)
-            {
-                return Content("not found");
-            }
-
-            return customer;
+            _mapper = mapper;
         }
 
        
-
-        //PUT
-        public void UpdateCustomer(int id, Customer customer)
+        /*
+        public CustomersController()
         {
-            if (!ModelState.IsValid)
-            {
-                throw BadRequest(ModelState);
-            }
+            _context = new EFCContext();
+           
+        }*/
 
-
-
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
-        }
-        */
-
-
-
-
+        
 
 
         // ------------------------------------------------
         [HttpGet]
-        public ActionResult<List<Customer>> GetAllCustomers()
+        public ActionResult<List<CustomerDbo>> GetAllCustomers()
         {
-            return _context.Customers.ToList();
+            var customers = _context.Customers.ToList();
+            //return _context.Customers.ToList();
+           // return _mapper.Map<CustomerDto>();
+           return Ok(_mapper.Map<IEnumerable<CustomerDbo>>(customers));
         }
 
         [HttpGet("{id}", Name = "Customers")]
-        public ActionResult<Customer> GetCustomerById(long id)
+        public ActionResult<CustomerDbo> GetCustomerById(long id)
         {
+            
             var item = _context.Customers.Find(id);
             if (item == null)
             {
                 return NotFound();
             }
-            return item;
+            return Ok(_mapper.Map<CustomerDbo>(item));
         }
 
         [HttpPost]
-        public ActionResult<Customer> CreateCustomer(Customer customer)
+        public ActionResult<CustomerDbo> CreateCustomer(CustomerDbo customerDTO)
         {
+            var customer = _mapper.Map<CustomerDbo, Customer>(customerDTO);
+
             if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest();
             }
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
+            customerDTO.Id = customer.Id;
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, Customer item)
+        public IActionResult Update(long id, CustomerDbo item)
         {
-            var customer = _context.Customers.SingleOrDefault(x => x.Id == id);
-            if (customer == null)
+            var customerInDb = _context.Customers.SingleOrDefault(x => x.Id == id);
+
+            if (customerInDb == null)
             {
                 return NotFound();
             }
 
-            customer.Name = item.Name;
+            _mapper.Map<CustomerDbo, Customer>(item, customerInDb);
+
+            /*customer.Name = item.Name;
             customer.BirthDate = item.BirthDate;
             customer.IsSubscribedToNewsletter = item.IsSubscribedToNewsletter;
-            customer.MembershipTypeId = item.MembershipTypeId;
+            customer.MembershipTypeId = item.MembershipTypeId; */
 
-            _context.Customers.Update(customer);
+            _context.Customers.Update(customerInDb);
             _context.SaveChanges();
 
             return NoContent();

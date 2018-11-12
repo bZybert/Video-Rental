@@ -35,7 +35,8 @@ namespace VideoRental
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            
+            /*
             //dodawanie automappera
             var config = new MapperConfiguration(cfg => {
                
@@ -44,10 +45,12 @@ namespace VideoRental
 
             var mapping = config.CreateMapper();
 
-            services.AddSingleton(mapping);
+            services.AddSingleton(mapping); */
 
+            
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

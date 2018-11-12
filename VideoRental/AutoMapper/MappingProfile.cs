@@ -12,7 +12,7 @@ namespace VideoRental.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<Customer, CustomerDto>().ReverseMap();
+            CreateMap<Customer, CustomerDbo>().ReverseMap();
         }
     }
 }

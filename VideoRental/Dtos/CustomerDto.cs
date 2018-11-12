@@ -7,7 +7,7 @@ using VideoRental.Models;
 
 namespace VideoRental.Dtos
 {
-    public class CustomerDto
+    public class CustomerDbo
     {
         public int Id { get; set; }
 

@@ -25,6 +25,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                  
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">VideoRental</a>
             </div>
@@ -33,15 +34,21 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Customers" asp-action="Index">Customers</a></li>
                     <li><a asp-area="" asp-controller="Movies" asp-action="Index">Movies</a></li>
+                    
                 </ul>
+               
             </div>
         </div>
     </nav>
     <main>
         @RenderBody()
     </main>
-    
+
+    <script src="~/js/site.js"></script>
    
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
