@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,7 @@ namespace VideoRental
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            
+
             /*
             //dodawanie automappera
             var config = new MapperConfiguration(cfg => {
@@ -47,7 +48,8 @@ namespace VideoRental
 
             services.AddSingleton(mapping); */
 
-            
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<EFCContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 services.AddAutoMapper();
@@ -69,7 +71,8 @@ services.AddAutoMapper();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseIdentity();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 
